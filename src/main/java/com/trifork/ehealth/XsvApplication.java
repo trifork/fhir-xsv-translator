@@ -54,8 +54,8 @@ public class XsvApplication
 
     rows.stream().map(Row::asConceptDefinitionComponent).forEach(npuCodeSystem::addConcept);
 
-    var csAsString = FhirContext.forR4().newJsonParser().encodeResourceToString(npuCodeSystem);
+    var csAsString = FhirContext.forR4().newJsonParser().encodeResourceToString(npuCodeSystem.setId("npu"));
 
-    Files.writeString(Path.of("output.json"),csAsString);
+    Files.writeString(Path.of("npu.json"),csAsString);
   }
 }
