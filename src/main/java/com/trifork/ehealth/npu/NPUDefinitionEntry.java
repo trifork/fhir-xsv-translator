@@ -11,7 +11,7 @@ import org.hl7.fhir.r4.model.CodeSystem.ConceptPropertyComponent;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.StringType;
 
-public class Row {
+public class NPUDefinitionEntry {
 
   @CsvBindByPosition(position = 1)
   private String changeDate;
@@ -43,6 +43,36 @@ public class Row {
   @CsvBindByPosition(position = 10)
   private String compSpec;
 
+  @CsvBindByPosition(position = 11)
+  private String kindOfProperty;
+
+  @CsvBindByPosition(position = 12)
+  private String proc;
+
+  @CsvBindByPosition(position = 13)
+  private String unit;
+
+  @CsvBindByPosition(position = 14)
+  private String speciality;
+
+  @CsvBindByPosition(position = 15)
+  private String subSpeciality;
+
+  @CsvBindByPosition(position = 16)
+  private String type;
+
+  @CsvBindByPosition(position = 17)
+  private String codeValue;
+
+  @CsvBindByPosition(position = 18)
+  private String contextDependant;
+
+  @CsvBindByPosition(position = 19)
+  private String scaleType;
+
+  @CsvBindByPosition(position = 20)
+  private String rule;
+
   @CsvBindByPosition(position = 21)
   private String active;
 
@@ -60,11 +90,7 @@ public class Row {
                   Date.valueOf(LocalDate.parse(changeDate, formatter)))));
     }
 
-    if (!Strings.isNullOrEmpty(changeComment)) {
-      conceptDefinitionComponent
-          .addProperty(new ConceptPropertyComponent().setCode("ChangeComment")
-              .setValue(new StringType().setValue(changeComment)));
-    }
+    addStringProperty(conceptDefinitionComponent, changeComment, "ChangeComment");
 
     if (!Strings.isNullOrEmpty(createdDate)) {
       conceptDefinitionComponent
@@ -73,35 +99,35 @@ public class Row {
                   Date.valueOf(LocalDate.parse(createdDate, formatter)))));
     }
 
-    if (!Strings.isNullOrEmpty(system)) {
-      conceptDefinitionComponent
-          .addProperty(new ConceptPropertyComponent().setCode("System")
-              .setValue(new StringType().setValue(system)));
-    }
+    addStringProperty(conceptDefinitionComponent, system, "System");
 
-    if (!Strings.isNullOrEmpty(sysSpec)) {
-      conceptDefinitionComponent
-          .addProperty(new ConceptPropertyComponent().setCode("SysSpec")
-              .setValue(new StringType().setValue(sysSpec)));
-    }
+    addStringProperty(conceptDefinitionComponent, sysSpec, "SysSpec");
 
-    if (!Strings.isNullOrEmpty(prefix)) {
-      conceptDefinitionComponent
-          .addProperty(new ConceptPropertyComponent().setCode("Prefix")
-              .setValue(new StringType().setValue(prefix)));
-    }
+    addStringProperty(conceptDefinitionComponent, prefix, "Prefix");
 
-    if (!Strings.isNullOrEmpty(component)) {
-      conceptDefinitionComponent
-          .addProperty(new ConceptPropertyComponent().setCode("Component")
-              .setValue(new StringType().setValue(component)));
-    }
+    addStringProperty(conceptDefinitionComponent, component, "Component");
 
-    if (!Strings.isNullOrEmpty(compSpec)) {
-      conceptDefinitionComponent
-          .addProperty(new ConceptPropertyComponent().setCode("CompSpec")
-              .setValue(new StringType().setValue(compSpec)));
-    }
+    addStringProperty(conceptDefinitionComponent, compSpec, "CompSpec");
+
+    addStringProperty(conceptDefinitionComponent, kindOfProperty, "Kind-of-property");
+
+    addStringProperty(conceptDefinitionComponent, proc, "Proc");
+
+    addStringProperty(conceptDefinitionComponent, unit, "Unit");
+
+    addStringProperty(conceptDefinitionComponent, speciality, "Speciality");
+
+    addStringProperty(conceptDefinitionComponent, subSpeciality, "Sub-speciality");
+
+    addStringProperty(conceptDefinitionComponent, type, "Type");
+
+    addStringProperty(conceptDefinitionComponent, codeValue, "Code value");
+
+    addStringProperty(conceptDefinitionComponent, contextDependant, "Context dependant");
+
+    addStringProperty(conceptDefinitionComponent, scaleType, "Scale type");
+
+    addStringProperty(conceptDefinitionComponent, rule, "Rule");
 
     if (!Strings.isNullOrEmpty(active)) {
       conceptDefinitionComponent
@@ -112,4 +138,20 @@ public class Row {
     return conceptDefinitionComponent;
   }
 
+  private void addStringProperty(ConceptDefinitionComponent conceptDefinitionComponent,
+      String field,
+      String fieldName) {
+    if (Strings.isNullOrEmpty(field)) {
+      return;
+    }
+
+    conceptDefinitionComponent
+        .addProperty(new ConceptPropertyComponent().setCode(fieldName)
+            .setValue(new StringType().setValue(field)));
+
+  }
+
 }
+
+
+
