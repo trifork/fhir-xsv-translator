@@ -81,7 +81,7 @@ public class NPUDefinitionEntry {
   public ConceptDefinitionComponent asConceptDefinitionComponent() {
     ConceptDefinitionComponent conceptDefinitionComponent = new ConceptDefinitionComponent()
         .setCode(npuCode)
-        .setDisplay(shortDefinition);
+        .setDefinition(shortDefinition);
 
     if (!Strings.isNullOrEmpty(changeDate)) {
       conceptDefinitionComponent
