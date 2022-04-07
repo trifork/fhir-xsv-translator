@@ -4,15 +4,15 @@ package com.trifork.ehealth.sks;
 import static java.nio.file.Files.writeString;
 
 import ca.uhn.fhir.context.FhirContext;
-import com.google.common.io.Files;
+import com.google.common.io.ByteSource;
 import com.joutvhu.fixedwidth.parser.FixedParser;
-import com.trifork.ehealth.npu.NPUDefinitionEntry;
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Stream;
 import org.hl7.fhir.r4.model.CodeSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +32,13 @@ public class SKSTsvApplication implements CommandLineRunner {
 
 
   @Override
-  public void run(String... args) throws IOException {
+  public void run(String... args) throws IOException, InterruptedException {
 
-    var lines = Files.asCharSource(
-        new File("src/main/resources/SKScomplete.txt"),
-        Charset.forName("windows-1252")).readLines();
+    var uri = URI.create("https://filer.sundhedsdata.dk/sks/data/skscomplete/SKScomplete.txt");
+    var request = HttpRequest.newBuilder(uri).build();
+    var content = HttpClient.newHttpClient().send(request, BodyHandlers.ofByteArray()).body();
+
+    var lines = ByteSource.wrap(content).asCharSource(Charset.forName("windows-1252")).readLines();
 
     var sksEntries = FixedParser.parser()
         .parse(SKSEntry.class, lines.stream());
