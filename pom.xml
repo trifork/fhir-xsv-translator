@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.6</version>
+    <version>2.6.6</version>
   </parent>
 
   <dependencies>
@@ -26,12 +26,17 @@
     <dependency>
       <groupId>com.opencsv</groupId>
       <artifactId>opencsv</artifactId>
-      <version>5.3</version>
+      <version>5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.joutvhu</groupId>
+      <artifactId>fixed-width-parser</artifactId>
+      <version>1.1.5</version>
     </dependency>
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-r4</artifactId>
-      <version>5.6.0</version>
+      <version>5.7.2</version>
     </dependency>
 
   </dependencies>

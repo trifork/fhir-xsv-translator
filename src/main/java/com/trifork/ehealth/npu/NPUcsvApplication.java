@@ -1,11 +1,9 @@
-package com.trifork.ehealth;
+package com.trifork.ehealth.npu;
 
 import static java.nio.file.Files.writeString;
 
 import ca.uhn.fhir.context.FhirContext;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.trifork.ehealth.npu.NPUDefinitionEntry;
-import com.trifork.ehealth.npu.NPUListEntry;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -26,7 +24,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class XsvApplication
+public class NPUcsvApplication
     implements CommandLineRunner {
 
   public static final String COPYRIGHT = "The International Union of Pure and Applied Chemistry (IUPAC) and the International Federation of Clinical Chemistry and laboratory medicine (IFCC)";
@@ -34,11 +32,11 @@ public class XsvApplication
   public static final String SYSTEM = "https://www.npu-terminology.org/";
 
   private static Logger LOG = LoggerFactory
-      .getLogger(XsvApplication.class);
+      .getLogger(NPUcsvApplication.class);
 
   public static void main(String[] args) {
     LOG.info("STARTING THE APPLICATION");
-    SpringApplication.run(XsvApplication.class, args);
+    SpringApplication.run(NPUcsvApplication.class, args);
     LOG.info("APPLICATION FINISHED");
   }
 
