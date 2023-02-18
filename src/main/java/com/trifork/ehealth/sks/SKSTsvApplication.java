@@ -14,8 +14,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.hl7.fhir.r4.model.CodeSystem;
@@ -51,7 +52,9 @@ public class SKSTsvApplication implements CommandLineRunner {
         var sksCodeSystem = new CodeSystem()
                 .setCopyright("SDS").setVersion("").setUrl("https://sundhedsdatastyrelsen.dk/sks");
         sksCodeSystem.setId("sks");
-        var sksEntriesAsList = sksEntries.map(SKSEntry::asConceptDefinitionComponent).collect(Collectors.toList());
+        Collection<CodeSystem.ConceptDefinitionComponent> sksEntriesAsList = sksEntries.map(SKSEntry::asConceptDefinitionComponent).collect(Collectors.toList());
+
+        sksEntriesAsList = removeDuplicates(sksEntriesAsList);
 //        sksEntriesAsList.forEach(sksCodeSystem::addConcept);
 
 
@@ -89,6 +92,23 @@ public class SKSTsvApplication implements CommandLineRunner {
         var csAsString = parser
                 .encodeResourceToString(sksCodeSystem.setId("sks"));
         writeString(Path.of("sks.json"), csAsString);
+    }
+
+    private Collection<CodeSystem.ConceptDefinitionComponent> removeDuplicates(Collection<CodeSystem.ConceptDefinitionComponent> sksEntriesAsList) {
+
+        //var possibleDuplicates = sksEntriesAsList.stream().filter(c -> c.getProperty().stream().anyMatch(p -> "DVal".equalsIgnoreCase(p.getCode()) && p.getValueIntegerType().getValue() == 3)).collect(Collectors.toMap(CodeSystem.ConceptDefinitionComponent::getCode, Function.identity()));
+
+        return sksEntriesAsList.stream()
+                .collect(Collectors.toMap(CodeSystem.ConceptDefinitionComponent::getCode, Function.identity(),
+                (existing, replacement) ->
+                {
+                    if(existing.getProperty().stream().anyMatch(p -> "DVal".equalsIgnoreCase(p.getCode()) && p.getValueIntegerType().getValue() == 3))
+                        return existing;
+                    return replacement;
+                }
+                )).values();
+
+
     }
 
     private void goDeep(CodeSystem.ConceptDefinitionComponent e, List<CodeSystem.ConceptDefinitionComponent> concept) {
