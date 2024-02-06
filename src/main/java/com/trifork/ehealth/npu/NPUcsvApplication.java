@@ -50,7 +50,7 @@ public class NPUcsvApplication
     valueSets.stream().forEach(valueSet -> {
 
       try {
-        writeString(Path.of(valueSet.getId() + ".json"),
+        writeString(Path.of("npu/" +valueSet.getId() + ".json"),
             parser.encodeResourceToString(valueSet));
       } catch (IOException e) {
         throw new RuntimeException(e);
@@ -60,12 +60,14 @@ public class NPUcsvApplication
     var npuCodeSystem = createNPUCodeSystem();
     var csAsString = parser
         .encodeResourceToString(npuCodeSystem.setId("npu"));
-    writeString(Path.of("npu.json"), csAsString);
+    writeString(Path.of("npu/npu.json"), csAsString);
 
   }
 
   private Collection<ValueSet> createNPUValueSets() throws IOException, InterruptedException {
-    var uri = URI.create("https://labterm.dk/Download/DownloadTable/NPUlistEN211028.csv");
+    //String url = "https://labterm.dk/Download/DownloadTable/NPUlistEN211028.csv";
+    String url = "https://pub-180a8d00f517477ba49634e6b2b147e3.r2.dev/2023/05/NPUdefinitionEN230407.csv";
+    var uri = URI.create(url);
     var request = HttpRequest.newBuilder(uri).build();
     var content = HttpClient.newHttpClient().send(request, BodyHandlers.ofByteArray()).body();
 
@@ -96,7 +98,9 @@ public class NPUcsvApplication
   private HashMap<String, ValueSet> valueSetHashMap = new HashMap<>();
 
   private CodeSystem createNPUCodeSystem() throws IOException, InterruptedException {
-    var uri = URI.create("https://labterm.dk/Download/DownloadTable/NPUdefinitionEN211028.csv");
+    //String url = "https://labterm.dk/Download/DownloadTable/NPUdefinitionEN211028.csv";
+    String url = "https://pub-180a8d00f517477ba49634e6b2b147e3.r2.dev/2023/05/NPUdefinitionEN230407.csv";
+    var uri = URI.create(url);
     var request = HttpRequest.newBuilder(uri).build();
     var content = HttpClient.newHttpClient().send(request, BodyHandlers.ofByteArray()).body();
 
